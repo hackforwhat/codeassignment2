@@ -10,11 +10,11 @@ bool friendNumber(int hp, int gil)
     {
         if (hp % i == 0) N1 += i;
     }
-    for (int j = 1; j < gil; j++)
+    for (int j = 1; j <= gil; j++)
     {
         if (gil % j == 0) N2 += j;
     }
-    if (N1 / hp == N2 / gil) return true;
+    if ((float)N1 / hp == (float) N2 / gil) return true;
     else return false;
 
 }
@@ -96,6 +96,7 @@ report* walkthrough(knight& theKnight, castle arrCastle[], int nCastle, int mode
     bool theOW = false;
     bool mythrill = false;
     bool SH = false;
+    bool killOdin=false;
 
     bool arthur = false;
     bool lancelot = false;
@@ -126,10 +127,15 @@ report* walkthrough(knight& theKnight, castle arrCastle[], int nCastle, int mode
             theEvent = cc.arrEvent[j];
             switch (theEvent)
             {
+            //MADBEAR
             case 1:
+            //MOONBRINGER
             case 2:
+            //ELF   
             case 3:
+            //SAXON
             case 4:
+            //TROLL
             case 5:
                 if (arthur == true || lancelot == true || lionheart == true || theOdin == true || paladin == true)
                 {
@@ -209,12 +215,19 @@ report* walkthrough(knight& theKnight, castle arrCastle[], int nCastle, int mode
 
 
                 } break;
+            //TORNBERY
             case 6:
             {
                 if (thePoision == true ) break;
                 b = (j + 1) % 10;
                 levelO = (j + 1) > 6 ? (b > 5 ? b : 5) : b;
-                if (theKnight.level >= levelO || arthur == true || lancelot == true || theOdin == true || lionheart == true) { theKnight.level++;MAXHP+=100; pReturn->nWin++; }
+                if (theKnight.level >= levelO || arthur == true || lancelot == true || theOdin == true || lionheart == true) 
+                { 
+                    pReturn->nWin++;
+                    int tempLevel=theKnight.level;
+                    theKnight.level=(theKnight.level==10)? 10:theKnight.level+1;
+                    MAXHP=(tempLevel==theKnight.level) ? MAXHP:MAXHP+100; 
+                }
                 else
                 {
                     pReturn->nLose++;
@@ -228,6 +241,7 @@ report* walkthrough(knight& theKnight, castle arrCastle[], int nCastle, int mode
 
                 }
             } break;
+            //QUEEN OF CARDS    
             case 7:
             {
                 b = (j + 1) % 10;
@@ -236,10 +250,11 @@ report* walkthrough(knight& theKnight, castle arrCastle[], int nCastle, int mode
                 else
                 {
                     pReturn->nLose++;
-                    if (SH == false || guinevere == false)
+                    if (SH == false && guinevere == false)
                         theKnight.gil /= 2;
                 }
             } break;
+            //NINA DE RINGS
             case 8:
             {
                 if (friendNumber(theKnight.HP, theKnight.gil) == true)
@@ -269,27 +284,34 @@ report* walkthrough(knight& theKnight, castle arrCastle[], int nCastle, int mode
                 if (guinevere == true) { theKnight.gil += 50; if (theKnight.gil > 999) theKnight.gil = 999; }
 
             } break;
+            //DURION
             case 9:
                 if (thePoision == true) thePoision = false;
                 theKnight.HP = MAXHP;
                 nPetal += 5;
                 if (nPetal > 99 || SH == true) nPetal = 99;
                 break;
+            //ANTIDOTE
             case 10:
                 theKnight.antidote++;
                 if (thePoision == true && poison!=0) { theKnight.antidote--; thePoision = false; };
                 break;
+            //ODIN
             case 11:
-                if(mythrill) break;
+                if(killOdin) break;
                 theOdin = true;
                 odin = 6;
                 break;
+            //MERLIN
             case 12:
+            {
                 thePoision = false;
-                theKnight.level++;
-                MAXHP += 100;
+                int tempLevel=theKnight.level;
+                theKnight.level=(theKnight.level==10)? 10:theKnight.level+1;
+                MAXHP=(tempLevel==theKnight.level) ? MAXHP:MAXHP+100;
                 theKnight.HP = MAXHP;
-                break;
+            } break;
+            //OMEGA WEAPON
             case 13:
             {
                 if (theOW == true) break;
@@ -304,15 +326,14 @@ report* walkthrough(knight& theKnight, castle arrCastle[], int nCastle, int mode
                 else
                 {
                     pReturn->nLose++;
-                    theOW = true;
                     if (mythrill == true) break;
                     theKnight.HP = 0;
                 }
             } break;
-
+            //HADES
             case 14:
             {
-                if (dragonKnight == false) theOdin = false;
+                if (dragonKnight == false && theOdin==true) {theOdin = false;killOdin=true;}
                 if (spear_lancetot == true && hair_guinevere == true && excalibur == false || arthur == true && hair_guinevere == true ||
                     lancelot == true && hair_guinevere == true || guinevere == true && spear_lancetot == true || lionheart == true || dragonKnight == true && theOdin == true)
                 {
@@ -329,10 +350,13 @@ report* walkthrough(knight& theKnight, castle arrCastle[], int nCastle, int mode
                     if (mythrill == false)  theKnight.HP = 0;
                 }
             } break;
+            //SCARLET HAKAMA
             case 15: SH = true;
                 break;
-            case 16:    //Lockdoor
+            //LOCKEDDOOR
+            case 16:    
             break;
+            //SHIELD OF PALADIN
             case 95:
             {   
                 if(mode==1)
@@ -341,6 +365,7 @@ report* walkthrough(knight& theKnight, castle arrCastle[], int nCastle, int mode
                 }
                 else shield_paladin = true;
             } break;
+            //SPEAR OF LANCELOT
             case 96:
             {
                 if(mode==1)
@@ -349,6 +374,7 @@ report* walkthrough(knight& theKnight, castle arrCastle[], int nCastle, int mode
                 }
                 else spear_lancetot = true; 
             } break;
+            // HAIR OF GUINEVERE
             case 97:
             {
                 if(mode==1)
@@ -357,11 +383,13 @@ report* walkthrough(knight& theKnight, castle arrCastle[], int nCastle, int mode
                 }
                 else hair_guinevere = true;
             } break;
+            //EXCALIBUR
             case 98:
             {
                 if ((shield_paladin == true && spear_lancetot == true && hair_guinevere == true) || arthur == true) excalibur = true;
             } break;
-            case 99://Ultimecia(Boss)
+            //Ultimecia(Boss)
+            case 99:
             {
                 if (excalibur == true && thePoision == true)
                 {
@@ -376,7 +404,7 @@ report* walkthrough(knight& theKnight, castle arrCastle[], int nCastle, int mode
                 else
                 {
                     pReturn->nLose++;
-                    if (mythrill == false || guinevere == false)
+                    if (mythrill == false && guinevere == false)
                         theKnight.HP /= 3;
                     if (theKnight.HP < 3) theKnight.HP = 1;
                 }
@@ -389,7 +417,9 @@ report* walkthrough(knight& theKnight, castle arrCastle[], int nCastle, int mode
 
             nPetal--;
             if (theKnight.level > 10) theKnight.level = 10;
-            if (MAXHP > 999) MAXHP = 999;
+            if(MAXHP>999) MAXHP=999;
+            if(theKnight.HP>999) theKnight.HP=999;
+            if(theKnight.gil>999) theKnight.gil=999;
             if (bFlag == 1) break; 
             if (nPetal == 0 && arthur == false) break;
             if (theKnight.HP <= 0) { callPhoenix(theKnight, MAXHP); thePoision = false, poison = -1; }
@@ -415,10 +445,13 @@ report* walkthrough(knight& theKnight, castle arrCastle[], int nCastle, int mode
         if (bFlag == 1) break;
         if (nPetal == 0 && arthur == false) break;
         if (nPetal >= 1 && i == nCastle - 1) i = -1;
-        theKnight.level++;
-        if (theKnight.level > 10) theKnight.level = 10;
-        MAXHP += 100;
-        if (MAXHP > 999) MAXHP = 999;
+        int tempLevel=theKnight.level;
+        theKnight.level=(theKnight.level==10)? 10:theKnight.level+1;
+        MAXHP=(tempLevel==theKnight.level) ? MAXHP:MAXHP+100;
+        if(MAXHP>999) MAXHP=999;
+        if(theKnight.HP>999) theKnight.HP=999;
+        if(theKnight.gil>999) theKnight.gil=999;
+        
     }
     // success or failure?	
     if (nPetal <= 0) nPetal = 0;
